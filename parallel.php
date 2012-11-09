@@ -1,9 +1,10 @@
 <?php
 
-	$arguments = getopt("d:m:");
+	$arguments = getopt("d:m:b");
 
 	$directory = (isset($arguments['d']) ? $arguments['d'] : "");
-	$maxParallel = (isset($arguments['m']) ? (int) $arguments['m'] : 5);;
+	$maxParallel = (isset($arguments['m']) ? (int) $arguments['m'] : 5);
+        $bootstrap = (isset($arguments['b']) ? $arguments['b'] : null);
 
 	$currentDirectory = dirname(__FILE__);
 
@@ -52,7 +53,7 @@
 		);
 
 		$pipes = array();
-		$process = proc_open('phpunit ' . $files[$i], $descriptorspec, $pipes, null, null);
+		$process = proc_open('phpunit ' . ($bootstrap ? '--bootstrap ' . $bootstrap . ' ' : '') . $files[$i], $descriptorspec, $pipes, null, null);
 
 		if (is_resource($process)) {
 			$runningProcesses[] = array('handle' => $process, 'nr' => $i);
